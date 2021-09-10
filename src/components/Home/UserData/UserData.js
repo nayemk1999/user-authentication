@@ -1,24 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Container, Modal, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import UserForm from '../UserForm/UserForm';
 import swal from 'sweetalert';
 import ReactPaginate from 'react-paginate';
+import axios from 'axios';
 
 
 
 const UserData = () => {
+    const [allUsers, setAllUser] = useState([]);
     const [show, setShow] = useState(null);
     const [update, setUpdate] = useState(true)
     const [pageNumber, setPageNumber] = useState(0);
     const [user, setUser] = useState({});
-    const [allUser, setAllUser] = useState([]);
+
+
+    const updateUser = (user) => {
+        setShow(true)
+        setUser(user)
+    }
+
+
+    const url = 'http://localhost:5050/auth/all-users'
+
+    useEffect(() => {
+        fetch(url)
+            .then(res => res.json())
+            .then(data => setAllUser(data))
+    }, [])
 
     const cardPerPage = 4
     const pagesVisited = pageNumber * cardPerPage
-    const displayCards = allUser.slice(-4).map(propsData => setUser(propsData))
-    const pageCount = Math.ceil(allUser.length / cardPerPage)
+    // const displayCards = allUsers.slice(-4).map(propsData => setUser(propsData))
+    const pageCount = Math.ceil(allUsers.length / cardPerPage)
     const changePage = ({ selected }) => {
         setPageNumber(selected)
     }
@@ -33,25 +49,21 @@ const UserData = () => {
             buttons: [true, "Yes"],
             dangerMode: true
         })
-        // .then(wantDelete => {
-        //     if (wantDelete) {
-        //         const loading = toast.loading('Deleting...Please wait!');
-        //         const removedServices = services.filter(item => item._id !== id);
-        //         axios.delete(`https://noboni-internet-service.herokuapp.com/deleted/${id}`)
-        //             .then(res => {
-        //                 toast.dismiss(loading);
-        //                 if (res.data) {
-        //                     setServices(removedServices)
-        //                     return swal("Successfully Deleted!", "Your service has been successfully deleted.", "success");
-        //                 }
-        //                 swal("Failed!", "Something went wrong! Please try again.", "error", { dangerMode: true });
-        //             })
-        //             .catch(err => {
-        //                 toast.dismiss(loading);
-        //                 swal("Failed!", "Something went wrong! Please try again.", "error", { dangerMode: true })
-        //             })
-        //     }
-        // });
+        .then(wantDelete => {
+            if (wantDelete) {
+                axios.delete(`http://localhost:5050/user/${id}`)
+                    .then(res => {
+                        console.log(res);
+                        if (res.data) {
+                            return swal("Successfully Deleted!", "One User has been successfully deleted.", "success");
+                        }
+                        swal("Failed!", "Something went wrong! Please try again.", "error", { dangerMode: true });
+                    })
+                    .catch(err => {
+                        swal("Failed!", "Something went wrong! Please try again.", "error", { dangerMode: true })
+                    })
+            }
+        });
     }
     return (
         <Container>
@@ -68,44 +80,30 @@ const UserData = () => {
                             <th className="text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody style={{ fontWeight: "500" }}>
-                        <tr>
-                            <td>{"index +1 "}</td>
-                            <td>{"index +1 "}</td>
-                            <td>{"index +1 "}</td>
-                            <td>{"index +1 "}</td>
-                            <td>Name</td>
-                            <td>৳ </td>
-                            <td className="text-center">
-                                <Button className="p-1 mb-0" style={{ borderRadius: "50%", backgroundColor: '#18FF2F', marginRight: '5px' }} onClick={() => setShow(true)}>
-                                    <FontAwesomeIcon icon={faEdit} className="mx-1" />
-                                </Button>
-                                <Button variant="danger" className="p-1 ml-3 mb-0" style={{ borderRadius: "50%" }} onClick={() => handleDeleteService()}>
-                                    <FontAwesomeIcon icon={faTrash} className="mx-1" />
-                                </Button>
-                            </td>
-                        </tr>
-                    </tbody>
-
-                    {/* {
-                                services.map((service, index) => {
-                                return (
-                                    <tbody key={service._id} style={{ fontWeight: "500" }}>
-                                        <tr>
-                                            <td>{index +1 }</td>
-                                            <td>{service.name}</td>
-                                            <td>৳ {service.price}</td>
-                                            <td className="text-center">
-                                                <Button variant="outline-success" className="p-1 mb-0" onClick={()=>handleUpdateService(service._id)}>
-                                                    <FontAwesomeIcon icon={faEdit} className="mx-1" />
-                                                </Button>
-                                                <Button variant="outline-danger" className="p-1 ml-3 mb-0" onClick={() => handleDeleteService(service._id)}>
-                                                    <FontAwesomeIcon icon={faTrash} className="mx-1" />
-                                                </Button>
-                                            </td>
-                                        </tr>
-                                    </tbody>  )})
-                            } */}
+                    {
+                        allUsers.map((user, index) => {
+                            // console.log(user);
+                            return (
+                                <tbody style={{ fontWeight: "500" }}>
+                                    <tr>
+                                        <td>{index + 1}</td>
+                                        <td>{user.firstName}</td>
+                                        <td>{user.lastName}</td>
+                                        <td>{user.userName}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.password}</td>
+                                        <td className="text-center">
+                                            <Button className="p-1 mb-0" style={{ borderRadius: "50%", backgroundColor: '#18FF2F', marginRight: '5px' }} onClick={() => updateUser(user)}>
+                                                <FontAwesomeIcon icon={faEdit} className="mx-1" />
+                                            </Button>
+                                            <Button variant="danger" className="p-1 ml-3 mb-0" style={{ borderRadius: "50%" }} onClick={() => handleDeleteService(user._id)}>
+                                                <FontAwesomeIcon icon={faTrash} className="mx-1" />
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                </tbody>)
+                        })
+                    }
                 </Table>
                 <div className="d-flex mt-5">
                     <ReactPaginate
@@ -127,7 +125,7 @@ const UserData = () => {
                             <Button onClick={() => setShow(false)}>Close</Button>
                         </Modal.Header>
                         <Modal.Body >
-                            <UserForm update={update} />
+                            <UserForm user={user} />
                         </Modal.Body>
                     </Modal>
                 </>
