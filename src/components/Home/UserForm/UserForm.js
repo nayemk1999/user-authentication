@@ -13,13 +13,7 @@ const UserForm = (props) => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const onSubmit = data => {
         const url = 'http://localhost:5050/auth/register'
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'Application/json'
-            },
-            body: JSON.stringify(data)
-        })
+        axios.post(url, data)
             .then(res => {
                 if (res) {
                     // toast.dismiss(loading);

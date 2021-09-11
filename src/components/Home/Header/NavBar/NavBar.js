@@ -1,12 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Container, Image, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
-// import { UserContext } from "../../../../App";
-// import ProfilePopper from "../../../ProfilePaper/ProfilePopper";
-// import "./NavBar.css";
 
 const NavBar = () => {
-//   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
   const [isSticky, setSticky] = useState(false);
   const [isCollapsed, setCollapsed] = useState(null);
 
@@ -43,25 +39,16 @@ const NavBar = () => {
             <Nav.Link as={Link} to="/home" className="mr-5 h5 nav-link">
               <strong class="colornav">Home</strong>
             </Nav.Link>
-            <Nav.Link href="#buy" className="mr-5 h5 nav-link">
+            <Nav.Link href="/" className="mr-5 h5 nav-link">
               <strong class="colornav">About</strong>
             </Nav.Link>
-            <Nav.Link href="#rent" className="mr-5 h5 nav-link">
+            <Nav.Link href="/" className="mr-5 h5 nav-link">
               <strong class="colornav">Contact</strong>
             </Nav.Link>
-            <Nav.Link as={Link} to="/sold" className="mr-5 h5 nav-link">
+            <Nav.Link as={Link} to="/" className="mr-5 h5 nav-link">
               <strong class="colornav">Users</strong>
             </Nav.Link>
           </Nav>
-          {/* <div>
-            {loggedInUser?.email ?
-              <ProfilePopper />
-              :
-              <Nav.Link style={{ marginLeft: "20px" }} className='h5 colornav' as={Link} to="/login" >
-                Login
-              </Nav.Link>
-            }
-          </div> */}
         </Navbar.Collapse>
       </Container>
     </Navbar>

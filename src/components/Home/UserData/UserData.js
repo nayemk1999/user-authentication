@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useHistory } from 'react-router';
 import './UserData.css'
 import UserUpdate from '../UserForm/UserUpdate';
+import usePasswordToggle from '../Hooks/Hooks';
 
 
 const UserData = () => {
@@ -17,12 +18,15 @@ const UserData = () => {
     const [pageNumber, setPageNumber] = useState(0);
     const [user, setUser] = useState({});
     const history = useHistory();
-
+    const [PasswordInputType, ToggleIcon] = usePasswordToggle();
+    const [passwordFocused, setPasswordFocused] = useState(false);
+    
 
     const [passwordShown, setPasswordShown] = useState(false);
     const togglePasswordVisiblity = () => {
         setPasswordShown(passwordShown ? false : true);
-      };
+    };
+
     const updateUser = (user) => {
         setShow(true)
         setUser(user)
@@ -73,9 +77,17 @@ const UserData = () => {
                     <td>{user.lastName}</td>
                     <td>{user.userName}</td>
                     <td>{user.email}</td>
-                    <div className='d-flex showPassword'>
-                        <input type={passwordShown ? "text" : "password"} className='mr-2 w-100' value={passwordShown && user.password} />
-                        <td><FontAwesomeIcon icon={faEye} size='1x' onClick={togglePasswordVisiblity} /></td>
+                    <div className='d-flex showPassword align-item-center'>
+                        <input
+                            className="form-control"
+                            type={PasswordInputType}
+                            value={user.password}
+                        />
+                        <span className=" mt-2">
+                            {ToggleIcon}
+                        </span>
+                        {/* <input type={passwordShown ? "text" : "password"} className='mr-2 w-100' value={user.password} />
+                        <FontAwesomeIcon icon={faEye} size='1x' onClick={togglePasswordVisiblity} /> */}
                     </div>
 
                     <td className="text-center">
