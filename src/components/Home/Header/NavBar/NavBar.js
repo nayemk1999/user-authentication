@@ -29,7 +29,7 @@ const NavBar = () => {
           : "slide out show navbar-expand-sm navbar-light py-2 fixed-top "
       }
     >
-      <Container className='mb-5'>
+      <Container >
         <Navbar.Brand as={Link} to="/">
           <strong class="colornav">Suffix IT Limited</strong>
         </Navbar.Brand>

@@ -1,24 +1,17 @@
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import './UserForm.css'
-import { Link, useHistory, useLocation } from 'react-router-dom';
-// import avatar from '../../image/avatar.svg';
-// import "firebase/auth";
-// import { fetchProfile, initializeLoginFramework } from './LoginManager';
-// import toast from 'react-hot-toast';
+import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
-import { Form } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 const UserForm = (props) => {
-    const [email, setEmail] = useState('');
-    const [name, setName] = useState('');
-    const [password, setPassword] = useState('');
-    const history = useHistory();
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    // const loading = toast.loading('Adding...Please wait!');
 
+    const history = useHistory();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const onSubmit = data => {
-        // console.log(data);
         const url = 'http://localhost:5050/auth/register'
         fetch(url, {
             method: 'POST',
@@ -30,50 +23,42 @@ const UserForm = (props) => {
             .then(res => {
                 if (res) {
                     // toast.dismiss(loading);
-                    // reset();
+                    reset();
                     return swal(`Successfully Create User`).then(res => console.log('donne'));
                 }
                 swal("Failed!", "Something went wrong! Please try again.", "error", { dangerMode: true });
             })
     }
 
-
     return (
-        <div className='mt-5'>
+        <div className=''>
             <div className="container">
                 {props.user ?
-                    <h2 className='text-center'>Update Management</h2>
+                    <h2 className='text-center'><FontAwesomeIcon icon={faUser} size='1x' /> Update Management</h2>
                     :
-                    <h2 className='text-center'>User Management</h2>
+                    <h2 className='text-center mt-5'><FontAwesomeIcon icon={faUser} size='1x' /> User Management</h2>
                 }
+                <form className='form' onSubmit={handleSubmit(onSubmit)}>
+                    <div className="mb-3"  >
+                        <input className='form-control' defaultValue={props.user && props.user.firstName} type="text" {...register("firstName", { required: true })} placeholder="First Name" />
+                    </div>
+                    <div className="mb-3"  >
+                        <input className='form-control' defaultValue={props.user && props.user.lastName} type="text" {...register("lastName", { required: true })} placeholder="Last Name" />
+                    </div>
+                    <div className="mb-3"  >
+                        <input className='form-control' defaultValue={props.user && props.user.userName} type="text" {...register("userName", { required: true })} placeholder="Username" />
+                    </div>
+                    <div className="mb-3"  >
+                        <input className='form-control' defaultValue={props.user && props.user.email} type="email" {...register("email", { required: true })} placeholder="Email" />
+                    </div>
+                    <div className="mb-3"  >
+                        <input className='form-control' defaultValue={props.user && props.user.password} type="password" {...register("password", { required: true })} placeholder="Password" />
+                    </div>
+                    <div className="mb-3"  >
 
-                <Form className='form' onSubmit={handleSubmit(onSubmit)}>
-                    <Form.Group className="mb-3"  >
-                        <Form.Control defaultValue={props.user && props.user.firstName} type="text" {...register("firstName", { required: true })} placeholder="First Name" />
-                    </Form.Group>
-                    <Form.Group className="mb-3"  >
-                        <Form.Control defaultValue={props.user && props.user.lastName} type="text" {...register("lastName", { required: true })} placeholder="Last Name" />
-                    </Form.Group>
-                    <Form.Group className="mb-3"  >
-                        <Form.Control defaultValue={props.user && props.user.userName} type="text" {...register("userName", { required: true })} placeholder="Username" />
-                    </Form.Group>
-                    <Form.Group className="mb-3"  >
-                        <Form.Control defaultValue={props.user && props.user.email} type="email" {...register("email", { required: true })} placeholder="Email" />
-                    </Form.Group>
-                    <Form.Group className="mb-3"  >
-                        <Form.Control defaultValue={props.user && props.user.password} type="password" {...register("password", { required: true })} placeholder="Password" />
-                    </Form.Group>
-                    <Form.Group className="mb-3"  >
-                        {props.user ?
-                            <Form.Control style={{ backgroundColor: '#0075FF', color: '#FFFFFF' }} type="submit" value='Update User' />
-                            :
-                            <Form.Control style={{ backgroundColor: '#0075FF', color: '#FFFFFF' }} type="submit" value='Create User' />
-                        }
-
-                    </Form.Group>
-                </Form>
-
-                {/* <input onClick={signupForm} type="submit" class="login-btn" value="Sign Up" /> */}
+                        <input className='form-control' style={{ backgroundColor: '#0075FF', color: '#FFFFFF' }} type="submit" value='Create User' />
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -83,34 +68,3 @@ const UserForm = (props) => {
 };
 
 export default UserForm;
-
-{/* <div className="form">
-                        <img class="avatar" src='{avatar}' alt="" />
-                        <h2>Welcome</h2>
-                        <div class="input-div one">
-                            <div class="i">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div>
-                                <h5>User Name</h5>
-                                <input onChange={(e) => setName(e.target.value)} onBlur={handleBlur} onFocus={handleFocus} class="input" type="text" name='username' />
-                            </div>
-                        </div>
-                        <div class="input-div one">
-                            <div class="i">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div>
-                                <h5>Email</h5>
-                                <input onChange={(e) => setEmail(e.target.value)} onBlur={handleBlur} onFocus={handleFocus} class="input" type="email" name='email' />
-                            </div>
-                        </div>
-                        <div class="input-div two">
-                            <div class="i">
-                                <i class="fas fa-lock"></i>
-                            </div>
-                            <div>
-                                <h5>Password</h5>
-                                <input onChange={(e) => setPassword(e.target.value)} onBlur={handleBlur} onFocus={handleFocus} class="input" type="password" name='password' />
-                            </div>
-                        </div> */}
