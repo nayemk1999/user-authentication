@@ -17,7 +17,7 @@ const UserUpdate = (props) => {
             userName: data.userName,
             email: data.email
         }
-        const url = `http://localhost:5050/user/${props.user._id}`
+        const url = `https://users-authentication.herokuapp.com/user/${props.user._id}`
         axios.patch(url, updateData)
             .then(res => {
                 if (res.data) {
