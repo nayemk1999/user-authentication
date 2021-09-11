@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from "react-hook-form";
 import './UserForm.css'
-import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
 const UserForm = (props) => {
-
-    const history = useHistory();
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const onSubmit = data => {
         const url = 'https://users-authentication.herokuapp.com/auth/register'
@@ -25,8 +22,7 @@ const UserForm = (props) => {
     }
 
     return (
-        <div className=''>
-            <div className="container">
+            <div className="container user-data">
                 {props.user ?
                     <h2 className='text-center'><FontAwesomeIcon icon={faUser} size='1x' /> Update Management</h2>
                     :
@@ -34,27 +30,30 @@ const UserForm = (props) => {
                 }
                 <form className='form' onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-3"  >
-                        <input className='form-control' defaultValue={props.user && props.user.firstName} type="text" {...register("firstName", { required: true })} placeholder="First Name" />
+                        <input className='form-control' type="text" {...register("firstName", { required: true })} placeholder="First Name" />
+                        {errors.firstName && <span>This field is required</span>}
                     </div>
                     <div className="mb-3"  >
-                        <input className='form-control' defaultValue={props.user && props.user.lastName} type="text" {...register("lastName", { required: true })} placeholder="Last Name" />
+                        <input className='form-control' type="text" {...register("lastName", { required: true })} placeholder="Last Name" />
+                        {errors.lastName && <span>This field is required</span>}
                     </div>
                     <div className="mb-3"  >
-                        <input className='form-control' defaultValue={props.user && props.user.userName} type="text" {...register("userName", { required: true })} placeholder="Username" />
+                        <input className='form-control' type="text" {...register("userName", { required: true })} placeholder="Username" />
+                        {errors.userName && <span>This field is required</span>}
                     </div>
                     <div className="mb-3"  >
-                        <input className='form-control' defaultValue={props.user && props.user.email} type="email" {...register("email", { required: true })} placeholder="Email" />
+                        <input className='form-control' type="email" {...register("email", { required: true })} placeholder="Email" />
+                        {errors.email && <span>This field is required</span>}
                     </div>
                     <div className="mb-3"  >
-                        <input className='form-control' defaultValue={props.user && props.user.password} type="password" {...register("password", { required: true })} placeholder="Password" />
+                        <input className='form-control' type="password" {...register("password", { required: true })} placeholder="Password" />
+                        {errors.password && <span>This field is required</span>}
                     </div>
                     <div className="mb-3"  >
-
                         <input className='form-control' style={{ backgroundColor: '#0075FF', color: '#FFFFFF' }} type="submit" value='Create User' />
                     </div>
                 </form>
             </div>
-        </div>
     );
 };
 

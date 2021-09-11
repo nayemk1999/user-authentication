@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Container, Modal, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowAltCircleLeft, faArrowAltCircleRight, faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowAltCircleLeft, faArrowAltCircleRight, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import swal from 'sweetalert';
 import ReactPaginate from 'react-paginate';
 import axios from 'axios';
@@ -18,14 +18,7 @@ const UserData = () => {
     const [user, setUser] = useState({});
     const history = useHistory();
     const [PasswordInputType, ToggleIcon] = usePasswordToggle();
-    const [passwordFocused, setPasswordFocused] = useState(false);
-    
-
-    const [passwordShown, setPasswordShown] = useState(false);
-    const togglePasswordVisiblity = () => {
-        setPasswordShown(passwordShown ? false : true);
-    };
-
+    const [loading, setLoading] = useState(false)
     const updateUser = (user) => {
         setShow(true)
         setUser(user)
@@ -37,14 +30,18 @@ const UserData = () => {
     useEffect(() => {
         const url = 'https://users-authentication.herokuapp.com/auth/all-users'
         axios.get(url)
-            .then(data => setAllUser(data.data))
+            .then(data => {
+                setAllUser(data.data)
+                setLoading(true)
+            }
+            )
     }, [allUsers])
 
 
     const handleDeleteUser = id => {
         swal({
             title: "Are you sure?",
-            text: "Are you sure you want to delete this service?",
+            text: "Are you sure you want to delete this user?",
             icon: "warning",
             buttons: [true, "Yes"],
             dangerMode: true
@@ -69,6 +66,7 @@ const UserData = () => {
     const pagesVisited = pageNumber * userPerPage
     const displayUsers = allUsers.slice(pagesVisited, pagesVisited + userPerPage).map((user, index) => {
         return (
+
             <tbody style={{ fontWeight: "500", borderWidth: '15px', borderRadius: '25px' }}>
                 <tr>
                     <td>{index + 1}</td>
@@ -88,7 +86,6 @@ const UserData = () => {
                         {/* <input type={passwordShown ? "text" : "password"} className='mr-2 w-100' value={user.password} />
                         <FontAwesomeIcon icon={faEye} size='1x' onClick={togglePasswordVisiblity} /> */}
                     </div>
-
                     <td className="text-center">
                         <Button className="p-1 mb-0" style={{ borderRadius: "50%", backgroundColor: '#18FF2F', marginRight: '5px' }} onClick={() => updateUser(user)}>
                             <FontAwesomeIcon icon={faEdit} className="mx-1" />
@@ -121,8 +118,13 @@ const UserData = () => {
                             <th className="text-center">Action</th>
                         </tr>
                     </thead>
-                    {
+                    {loading ?
                         displayUsers
+                        :
+                        <div className='d-flex justify-content-center'>
+                            <div class="spinner-border text-danger mt-2 " role="status">
+                            </div>
+                        </div>
                     }
                 </Table>
 
@@ -138,7 +140,7 @@ const UserData = () => {
                     </Modal>
                 </>
             </>
-            <div className="d-flex mt-5">
+            <div className="d-flex justify-content-between mt-5">
                 <ReactPaginate
                     previousLabel={faArrowLeft}
                     nextLabel={faArrowRight}
@@ -150,6 +152,9 @@ const UserData = () => {
                     disabledClassName={"paginationDisabled"}
                     activeClassName={"paginationActive"}
                 />
+                <div>
+                    <h6>Showing {displayUsers.length} out of {allUsers.length}</h6>
+                </div>
             </div>
         </Container >
     );

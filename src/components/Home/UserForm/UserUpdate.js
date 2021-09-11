@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import swal from 'sweetalert';
 
 const UserUpdate = (props) => {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset } = useForm();
     const [updateData, setUpdateData] = useState({})
 
     const onSubmit = data => {
