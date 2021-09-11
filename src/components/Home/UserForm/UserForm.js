@@ -12,13 +12,13 @@ const UserForm = (props) => {
     const history = useHistory();
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const onSubmit = data => {
-        const url = 'http://localhost:5050/auth/register'
+        const url = 'https://users-authentication.herokuapp.com/auth/register'
         axios.post(url, data)
             .then(res => {
                 if (res) {
                     // toast.dismiss(loading);
                     reset();
-                    return swal(`Successfully Create User`).then(res => console.log('donne'));
+                    return swal(`Successfully Create User `, 'Please check user list').then(res => console.log('donne'));
                 }
                 swal("Failed!", "Something went wrong! Please try again.", "error", { dangerMode: true });
             })
@@ -55,9 +55,6 @@ const UserForm = (props) => {
                 </form>
             </div>
         </div>
-
-
-
     );
 };
 

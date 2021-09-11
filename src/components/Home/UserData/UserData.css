@@ -2,8 +2,6 @@
 .paginationBttns {
     list-style: none;
     display: flex;
-    /* background-color: #FFFFFF !important; */
-    /* justify-content: center; */
   }
   .showPassword input{
       outline: none !important;

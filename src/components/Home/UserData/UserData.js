@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Button, Container, Modal, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowAltCircleLeft, faArrowAltCircleRight, faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
-import UserForm from '../UserForm/UserForm';
 import swal from 'sweetalert';
 import ReactPaginate from 'react-paginate';
 import axios from 'axios';
@@ -36,7 +35,7 @@ const UserData = () => {
     const faArrowRight = <FontAwesomeIcon icon={faArrowAltCircleRight} />
 
     useEffect(() => {
-        const url = 'http://localhost:5050/auth/all-users'
+        const url = 'https://users-authentication.herokuapp.com/auth/all-users'
         axios.get(url)
             .then(data => setAllUser(data.data))
     }, [allUsers])
@@ -52,7 +51,7 @@ const UserData = () => {
         })
             .then(wantDelete => {
                 if (wantDelete) {
-                    axios.delete(`http://localhost:5050/user/${id}`)
+                    axios.delete(`https://users-authentication.herokuapp.com/user/${id}`)
                         .then(res => {
                             if (res.data) {
                                 return swal("Successfully Deleted!", "One User has been successfully deleted.", "success").then(res => history.push('/'));
